@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Membaca Artikel | Rumah Kita - UKMI Ar-Rahman</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="logo.png"/>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e66f",
+                        "primary-dark": "#14b859",
+                        "gold": "#D4AF37",
+                        "background-light": "#FDFBF7",
+                        "background-dark": "#112118",
+                        "deep-green": "#0e1b13",
+                    },
+                    fontFamily: {
+                        "display": ["Playfair Display", "serif"],
+                        "sans": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .nature-pattern { background-image: radial-gradient(#19e66f 0.5px, transparent 0.5px); background-size: 24px 24px; opacity: 0.05; }
+        .serif-body { font-family: 'Work Sans', sans-serif; line-height: 1.8; }
+        .serif-heading { font-family: 'Playfair Display', serif; }
+        #article-content p { margin-bottom: 1.5em; font-size: 1.1rem; color: inherit; }
+        #article-content h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-top: 2em; margin-bottom: 0.5em; }
+        #article-content ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; }
+        #article-content blockquote { border-left: 4px solid #19e66f; padding-left: 1em; font-style: italic; margin: 1.5em 0; color: #4e976d; }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-deep-green dark:text-gray-200 min-h-screen relative font-sans transition-colors duration-300">
+
+<div class="fixed top-0 left-0 w-full z-[60] bg-transparent">
+    <div class="h-1 bg-gray-200 dark:bg-gray-800 w-full">
+        <div id="reading-progress" class="h-1 bg-primary transition-all duration-100" style="width: 0%;"></div>
+    </div>
+</div>
+
+<div class="fixed inset-0 nature-pattern pointer-events-none"></div>
+
+<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 h-20 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="logo.png" alt="Logo UKMI" class="h-10 w-auto object-contain">
+            <div class="flex flex-col"><h2 class="text-xl font-bold tracking-tight leading-none font-sans">Rumah Kita</h2><span class="text-[10px] font-semibold tracking-wider text-gray-500 uppercase">UKMI Ar-Rahman</span></div>
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="index.html">Beranda</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="articles.html">Artikel</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"><span id="theme-icon" class="material-symbols-outlined text-xl">dark_mode</span></button>
+        </div>
+    </div>
+</header>
+
+<main class="relative flex flex-col items-center px-4 md:px-10 pb-20 pt-12">
+    
+    <div id="loading-state" class="flex flex-col items-center justify-center py-20">
+        <span class="material-symbols-outlined animate-spin text-4xl text-primary">progress_activity</span>
+        <p class="mt-4 text-gray-500">Memuat artikel...</p>
+    </div>
+
+    <div id="not-found-state" class="hidden flex-col items-center justify-center py-20 text-center">
+        <span class="material-symbols-outlined text-6xl text-gray-300">article</span>
+        <h2 class="text-2xl font-bold mt-4">Artikel Tidak Ditemukan</h2>
+        <p class="text-gray-500 mt-2 mb-6">Artikel yang kamu cari mungkin sudah dihapus atau link-nya salah.</p>
+        <a href="articles.html" class="bg-primary text-deep-green px-6 py-2 rounded-lg font-bold">Kembali ke Daftar</a>
+    </div>
+
+    <div id="article-container" class="hidden w-full flex-col items-center">
+        
+        <div class="max-w-[800px] w-full text-center mb-12 animate-fade-in-up">
+            <div id="art-badge" class="inline-block px-3 py-1 bg-primary/10 text-primary-dark dark:text-primary text-xs font-bold tracking-widest uppercase rounded-full mb-6">Kategori</div>
+            <h1 id="art-title" class="serif-heading text-deep-green dark:text-white text-3xl md:text-5xl font-bold leading-tight mb-6">Judul Artikel</h1>
+            <p id="art-meta" class="text-gray-500 text-sm font-medium italic pb-3">Oleh Admin • 12 Mei 2025</p>
+        </div>
+
+        <div class="max-w-[960px] w-full mb-12 animate-fade-in-up delay-100">
+            <div id="art-image" class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-2xl min-h-[300px] md:min-h-[500px] shadow-xl border border-gray-200 dark:border-gray-800" style="background-image: url('https://via.placeholder.com/1200');"></div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12 max-w-[1100px] w-full relative">
+            
+            <aside class="hidden lg:flex flex-col gap-4 sticky top-32 h-fit">
+                <button onclick="shareArticle()" class="flex flex-col items-center gap-1 group">
+                    <div class="rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-gray-700 p-3 text-gray-500 group-hover:bg-primary group-hover:text-deep-green group-hover:border-primary transition-all shadow-sm">
+                        <span class="material-symbols-outlined">share</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-400 group-hover:text-primary uppercase tracking-tighter">Share</span>
+                </button>
+                <button onclick="window.print()" class="flex flex-col items-center gap-1 group">
+                    <div class="rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-gray-700 p-3 text-gray-500 group-hover:bg-primary group-hover:text-deep-green group-hover:border-primary transition-all shadow-sm">
+                        <span class="material-symbols-outlined">print</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-400 group-hover:text-primary uppercase tracking-tighter">Print</span>
+                </button>
+            </aside>
+
+            <article class="flex-1 bg-white/60 dark:bg-background-dark/50 backdrop-blur-sm border border-gray-100 dark:border-gray-800 rounded-2xl p-6 md:p-12 shadow-sm animate-fade-in-up delay-200">
+                <div id="article-content" class="serif-body text-deep-green dark:text-gray-300 text-lg leading-relaxed">
+                    </div>
+                <div class="mt-12 border-t border-gray-200 dark:border-gray-800 pt-8 lg:hidden">
+                    <button onclick="shareArticle()" class="w-full flex items-center justify-center gap-2 bg-primary/10 py-3 rounded-lg text-primary font-bold hover:bg-primary hover:text-deep-green transition-all">
+                        <span class="material-symbols-outlined">share</span> Bagikan Artikel
+                    </button>
+                </div>
+            </article>
+
+            <aside class="hidden lg:block w-72 space-y-8 h-fit sticky top-32">
+                <div class="space-y-6">
+                    <h4 class="font-sans font-bold text-xs uppercase tracking-widest text-primary border-b border-gray-200 dark:border-gray-700 pb-2">Baca Selanjutnya</h4>
+                    <div id="related-articles" class="flex flex-col gap-6">
+                        <div class="animate-pulse flex flex-col gap-2">
+                            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-lg"></div>
+                            <div class="bg-gray-200 dark:bg-gray-800 h-4 w-3/4 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+</main>
+
+<footer class="w-full border-t border-gray-200 dark:border-gray-800 py-20 px-10 bg-white dark:bg-background-dark text-center relative z-10">
+    <div class="max-w-[800px] mx-auto">
+        <div class="flex justify-center gap-2 mb-6 text-primary">
+            <img src="logo.png" alt="Logo UKMI" class="h-10 w-auto object-contain">
+        </div>
+        <h3 class="serif-heading text-2xl font-bold mb-4 text-deep-green dark:text-white">Rumah Kita - UKMI Ar-Rahman</h3>
+        <p class="font-sans text-gray-500 mb-10 max-w-md mx-auto text-sm">Wadah kolaborasi, prestasi, dan ukhuwah mahasiswa muslim UNIMED.</p>
+        <div class="flex gap-8 justify-center items-center text-sm font-bold text-primary">
+            <a class="hover:underline" href="index.html">Beranda</a>
+            <a class="hover:underline" href="articles.html">Artikel Lainnya</a>
+            <a class="hover:underline" href="#">Kontak</a>
+        </div>
+        <p class="mt-12 text-[10px] uppercase tracking-[0.2em] text-gray-400">© 2025 UKMI Ar-Rahman UNIMED.</p>
+    </div>
+</footer>
+
+<script>
+    window.onscroll = function() {
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("reading-progress").style.width = scrolled + "%";
+    };
+
+    function toggleTheme() {
+        const html = document.documentElement; const icon = document.getElementById('theme-icon');
+        if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.setItem('theme', 'light'); icon.innerText = 'dark_mode'; } 
+        else { html.classList.add('dark'); localStorage.setItem('theme', 'dark'); icon.innerText = 'light_mode'; }
+    }
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('theme-icon').innerText = 'light_mode'; }
+
+    async function shareArticle() {
+        if (navigator.share) {
+            try { await navigator.share({ title: document.title, url: window.location.href }); } catch (err) { console.log('Share canceled'); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link artikel telah disalin!");
+        }
+    }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD99enNG4t0Ttq8OxXLYyy6kqwg3shCqM4",
+        authDomain: "rumah-kita-31dc0.firebaseapp.com",
+        databaseURL: "https://rumah-kita-31dc0-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "rumah-kita-31dc0",
+        storageBucket: "rumah-kita-31dc0.firebasestorage.app",
+        messagingSenderId: "210169122541",
+        appId: "1:210169122541:web:626ec3d023519ac1ce46e4",
+        measurementId: "G-YV2DVYHL9Z"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 1. GET ID FROM URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+
+    const loadingState = document.getElementById('loading-state');
+    const notFoundState = document.getElementById('not-found-state');
+    const articleContainer = document.getElementById('article-container');
+
+    if (!articleId) {
+        loadingState.style.display = 'none';
+        notFoundState.style.display = 'flex';
+    } else {
+        const artRef = ref(db, 'articles/' + articleId);
+        onValue(artRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                document.title = `${data.title} | UKMI Ar-Rahman`;
+                document.getElementById('art-badge').innerText = data.category || "Umum";
+                document.getElementById('art-title').innerText = data.title;
+                
+                // UPDATED: Show Author Name
+                const authorName = data.author || "Admin";
+                document.getElementById('art-meta').innerText = `Oleh ${authorName} • ${data.date}`;
+                
+                const imgUrl = data.image || 'https://via.placeholder.com/1200x600?text=No+Image';
+                document.getElementById('art-image').style.backgroundImage = `url('${imgUrl}')`;
+
+                const formattedContent = data.content ? data.content.replace(/\n/g, '<br><br>') : "<p>Belum ada isi artikel.</p>";
+                document.getElementById('article-content').innerHTML = formattedContent;
+
+                loadingState.style.display = 'none';
+                articleContainer.style.display = 'flex';
+                loadRelated(articleId);
+            } else {
+                loadingState.style.display = 'none';
+                notFoundState.style.display = 'flex';
+            }
+        });
+    }
+
+    function loadRelated(currentId) {
+        const relatedQuery = query(ref(db, 'articles'), limitToLast(4)); 
+        onValue(relatedQuery, (snapshot) => {
+            const data = snapshot.val();
+            const container = document.getElementById('related-articles');
+            container.innerHTML = "";
+
+            if(data) {
+                let count = 0;
+                const keys = Object.keys(data).reverse(); 
+                
+                keys.forEach(key => {
+                    if (key !== currentId && count < 3) { 
+                        const item = data[key];
+                        const img = item.image || 'https://via.placeholder.com/400';
+                        
+                        // UPDATED LINK: articles-detail.html
+                        const card = `
+                        <div class="group cursor-pointer" onclick="window.location.href='articles-detail.html?id=${key}'">
+                            <div class="h-32 rounded-lg bg-cover bg-center mb-3 overflow-hidden border border-gray-200 dark:border-gray-700 relative">
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <h5 class="text-sm font-bold serif-heading text-deep-green dark:text-white group-hover:text-primary transition-colors line-clamp-2">${item.title}</h5>
+                            <p class="text-[10px] text-primary mt-1 font-bold uppercase">${item.category}</p>
+                        </div>`;
+                        
+                        container.innerHTML += card;
+                        count++;
+                    }
+                });
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

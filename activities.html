@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Program & Kegiatan | Rumah Kita - UKMI Ar-Rahman</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="logo.png"/>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e66f",
+                        "primary-dark": "#14b859",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112118",
+                        "deep-green": "#0e1b13",
+                        "sage": "#4e976d",
+                    },
+                    fontFamily: { "display": ["Work Sans", "sans-serif"] },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .geometric-pattern { background-image: radial-gradient(#19e66f22 1px, transparent 1px); background-size: 40px 40px; }
+        .dark .geometric-pattern { background-image: radial-gradient(#19e66f11 1px, transparent 1px); }
+        #mobile-menu { transition: max-height 0.3s ease-in-out; }
+        
+        /* Modal Animation */
+        #activityModal { transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; }
+        #activityModalContent { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-open #activityModal { opacity: 1; visibility: visible; }
+        .modal-open #activityModalContent { transform: scale(1); }
+        .modal-closed #activityModal { opacity: 0; visibility: hidden; }
+        .modal-closed #activityModalContent { transform: scale(0.95); }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-deep-green dark:text-gray-100 antialiased transition-colors duration-300">
+
+<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 h-20 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="logo.png" alt="Logo UKMI" class="h-10 w-auto object-contain">
+            <div class="flex flex-col"><h2 class="text-xl font-bold tracking-tight leading-none">Rumah Kita</h2><span class="text-[10px] font-semibold tracking-wider text-gray-500 uppercase">UKMI Ar-Rahman</span></div>
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="index.html">Beranda</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="about.html">Tentang</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="management.html">Struktur</a>
+            <a class="text-sm font-bold text-primary transition-colors" href="activities.html">Program</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="articles.html">Artikel</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"><span id="theme-icon" class="material-symbols-outlined text-xl">dark_mode</span></button>
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-deep-green dark:text-white"><span class="material-symbols-outlined text-2xl">menu</span></button>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+        <nav class="flex flex-col p-6 gap-4 text-center">
+            <a class="text-lg font-medium hover:text-primary" href="index.html">Beranda</a>
+            <a class="text-lg font-medium hover:text-primary" href="about.html">Tentang</a>
+            <a class="text-lg font-medium hover:text-primary" href="management.html">Struktur</a>
+            <a class="text-lg font-bold text-primary" href="activities.html">Program</a>
+            <a class="text-lg font-medium hover:text-primary" href="articles.html">Artikel</a>
+        </nav>
+    </div>
+</header>
+
+<main class="min-h-screen py-10 relative">
+    <div class="max-w-[1200px] mx-auto px-6 lg:px-20">
+        <div class="flex flex-col gap-3 mb-12 animate-fade-in-up">
+            <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight text-deep-green dark:text-white">Program & Kegiatan</h1>
+            <p class="text-sage dark:text-gray-400 text-lg max-w-2xl">Telusuri arsip kegiatan, kajian rutin, dan agenda besar kami.</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 items-center mb-10 bg-white dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div class="flex-1 w-full relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-sage"><span class="material-symbols-outlined">search</span></div>
+                <input id="searchInput" onkeyup="globalSearch(this.value)" class="w-full pl-10 pr-4 py-3 rounded-lg border-none bg-background-light dark:bg-background-dark text-deep-green dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary transition-all" placeholder="Cari kegiatan...">
+            </div>
+            <div class="flex gap-2 flex-wrap justify-center md:justify-end">
+                <button onclick="filterEvents('all')" class="filter-btn active bg-primary text-deep-green px-4 py-2 rounded-lg text-sm font-bold transition-all" data-filter="all">Semua</button>
+                <button onclick="filterEvents('dakwah')" class="filter-btn bg-background-light dark:bg-background-dark text-deep-green dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-primary/20" data-filter="dakwah">Dakwah</button>
+                <button onclick="filterEvents('sosial')" class="filter-btn bg-background-light dark:bg-background-dark text-deep-green dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-primary/20" data-filter="sosial">Sosial</button>
+                <button onclick="filterEvents('workshop')" class="filter-btn bg-background-light dark:bg-background-dark text-deep-green dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-primary/20" data-filter="workshop">Workshop</button>
+                <button onclick="filterEvents('phbi')" class="filter-btn bg-background-light dark:bg-background-dark text-deep-green dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-primary/20" data-filter="phbi">PHBI</button>
+            </div>
+        </div>
+
+        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+            <div class="col-span-3 text-center py-20"><span class="material-symbols-outlined animate-spin text-4xl text-primary">progress_activity</span></div>
+        </div>
+
+        <div id="pagination-container" class="mt-16 flex items-center justify-center gap-2"></div>
+    </div>
+</main>
+
+<div id="activityModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm opacity-0 invisible" onclick="closeActivityModal(event)">
+    <div id="activityModalContent" class="bg-white dark:bg-[#1a2e22] w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 relative flex flex-col md:flex-row max-h-[90vh]">
+        
+        <button onclick="closeActivityModal(null, true)" class="absolute top-4 right-4 z-50 bg-white/20 hover:bg-white/40 text-white md:text-deep-green dark:text-white p-2 rounded-full backdrop-blur-md transition-colors">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+
+        <div class="w-full md:w-3/5 bg-black relative group h-72 md:h-auto flex items-center justify-center overflow-hidden bg-gray-900">
+            <img id="modal-img" class="w-full h-full object-contain transition-opacity duration-300" src="" alt="Detail Kegiatan">
+            
+            <button id="btn-prev" onclick="prevImage()" class="absolute left-4 bg-black/30 hover:bg-primary text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100 transform hover:scale-110 hidden">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button id="btn-next" onclick="nextImage()" class="absolute right-4 bg-black/30 hover:bg-primary text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100 transform hover:scale-110 hidden">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+
+        <div class="w-full md:w-2/5 p-8 flex flex-col overflow-y-auto">
+            <div class="mb-auto">
+                <div class="flex justify-between items-start mb-4">
+                    <span id="modal-category" class="inline-block bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Kategori</span>
+                    <span id="image-counter" class="text-xs text-gray-400 font-mono bg-gray-100 dark:bg-white/10 px-2 py-1 rounded">1 / 1</span>
+                </div>
+                
+                <h2 id="modal-title" class="text-2xl md:text-3xl font-black text-deep-green dark:text-white leading-tight mb-6">Judul Kegiatan</h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm text-primary">
+                            <span class="material-symbols-outlined text-xl">calendar_today</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 font-bold uppercase">Tanggal Pelaksanaan</p>
+                            <p id="modal-date" class="font-bold text-deep-green dark:text-white">...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm text-primary">
+                            <span class="material-symbols-outlined text-xl">location_on</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 font-bold uppercase">Lokasi Kegiatan</p>
+                            <p id="modal-location" class="font-bold text-deep-green dark:text-white">...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-bold text-deep-green dark:text-white mb-2">Tentang Kegiatan</h4>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
+                        Kegiatan ini diselenggarakan oleh UKMI Ar-Rahman sebagai bagian dari syiar dakwah kampus. Mari hadiri dan ramaikan untuk mempererat ukhuwah islamiyah.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-white dark:bg-background-dark py-20 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 text-center text-sm text-gray-500">
+        <p>© 2025 UKMI Ar-Rahman UNIMED. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement; const icon = document.getElementById('theme-icon');
+        if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.setItem('theme', 'light'); icon.innerText = 'dark_mode'; } 
+        else { html.classList.add('dark'); localStorage.setItem('theme', 'dark'); icon.innerText = 'light_mode'; }
+    }
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('theme-icon').innerText = 'light_mode'; } 
+    else { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').innerText = 'dark_mode'; }
+    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+    
+    // --- MODAL & SLIDER LOGIC ---
+    let currentImageIndex = 0;
+    let galleryImages = []; 
+
+    function openActivityModal(eventData) {
+        const modal = document.getElementById('activityModal');
+        const content = document.getElementById('activityModalContent');
+        
+        document.getElementById('modal-title').innerText = eventData.title;
+        document.getElementById('modal-category').innerText = eventData.category;
+        document.getElementById('modal-date').innerText = eventData.date;
+        document.getElementById('modal-location').innerText = eventData.location;
+        
+        // Setup Gallery from Multi-Image Array
+        galleryImages = [];
+        if (eventData.gallery && eventData.gallery.length > 0) {
+            galleryImages = eventData.gallery; // Pakai array dari Firebase
+        } else if (eventData.image) {
+            galleryImages = [eventData.image]; // Fallback ke single image lama
+        } else {
+            galleryImages = ['https://via.placeholder.com/600x400']; // Placeholder
+        }
+        
+        currentImageIndex = 0;
+        updateModalImage();
+        updateSliderControls();
+
+        document.body.classList.add('overflow-hidden'); 
+        modal.classList.remove('invisible', 'opacity-0');
+        modal.classList.add('visible', 'opacity-100');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+    }
+
+    function closeActivityModal(e, force = false) {
+        if (force || e.target.id === 'activityModal') {
+            const modal = document.getElementById('activityModal');
+            const content = document.getElementById('activityModalContent');
+            modal.classList.remove('visible', 'opacity-100');
+            modal.classList.add('invisible', 'opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => { document.body.classList.remove('overflow-hidden'); }, 300);
+        }
+    }
+
+    function updateModalImage() {
+        const img = document.getElementById('modal-img');
+        const counter = document.getElementById('image-counter');
+        
+        img.style.opacity = '0';
+        setTimeout(() => { 
+            img.src = galleryImages[currentImageIndex]; 
+            img.style.opacity = '1'; 
+        }, 150);
+        
+        counter.innerText = `${currentImageIndex + 1} / ${galleryImages.length}`;
+    }
+
+    function updateSliderControls() {
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        
+        if (galleryImages.length > 1) {
+            btnPrev.classList.remove('hidden');
+            btnNext.classList.remove('hidden');
+        } else {
+            btnPrev.classList.add('hidden');
+            btnNext.classList.add('hidden');
+        }
+    }
+
+    window.nextImage = () => { currentImageIndex = (currentImageIndex + 1) % galleryImages.length; updateModalImage(); }
+    window.prevImage = () => { currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length; updateModalImage(); }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD99enNG4t0Ttq8OxXLYyy6kqwg3shCqM4",
+        authDomain: "rumah-kita-31dc0.firebaseapp.com",
+        databaseURL: "https://rumah-kita-31dc0-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "rumah-kita-31dc0",
+        storageBucket: "rumah-kita-31dc0.firebasestorage.app",
+        messagingSenderId: "210169122541",
+        appId: "1:210169122541:web:626ec3d023519ac1ce46e4",
+        measurementId: "G-YV2DVYHL9Z"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let allEvents = [];
+    let currentPage = 1;
+    const itemsPerPage = 6;
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    const eventsRef = ref(db, 'events');
+    onValue(eventsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            allEvents = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+            renderApp();
+        } else {
+            document.getElementById('eventsGrid').innerHTML = `<div class="col-span-3 text-center py-20 text-gray-400">Belum ada kegiatan.</div>`;
+            document.getElementById('pagination-container').innerHTML = '';
+        }
+    });
+
+    function renderApp() {
+        let filtered = allEvents;
+        if (currentFilter !== 'all') filtered = filtered.filter(e => e.category === currentFilter);
+        if (currentSearch) {
+            const q = currentSearch.toLowerCase();
+            filtered = filtered.filter(e => e.title.toLowerCase().includes(q) || e.location.toLowerCase().includes(q));
+        }
+
+        const totalPages = Math.ceil(filtered.length / itemsPerPage);
+        if (currentPage > totalPages) currentPage = 1;
+        if (currentPage < 1 && totalPages > 0) currentPage = 1;
+
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedItems = filtered.slice(start, end);
+
+        const grid = document.getElementById('eventsGrid');
+        grid.innerHTML = "";
+        
+        if(paginatedItems.length > 0) {
+            paginatedItems.forEach((item) => {
+                // Ensure gallery exists or create fallback array for serialization
+                if(!item.gallery && item.image) item.gallery = [item.image];
+                
+                const itemData = JSON.stringify(item).replace(/"/g, '&quot;');
+                
+                // Use first image from gallery or fallback 'image' property
+                const thumbImage = (item.gallery && item.gallery.length > 0) ? item.gallery[0] : (item.image || 'https://via.placeholder.com/400');
+
+                const card = `
+                <div onclick="openActivityModal(${itemData})" class="group cursor-pointer bg-white dark:bg-[#15291e] rounded-2xl border border-gray-200 dark:border-gray-800 hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden flex flex-col h-full animate-fade-in-up">
+                    <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                        <img src="${thumbImage}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+                        <div class="absolute bottom-3 left-3 right-3">
+                            <span class="inline-block bg-primary text-deep-green text-[10px] font-bold px-2 py-1 rounded shadow-sm uppercase tracking-wider mb-1">${item.category}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-lg font-bold text-deep-green dark:text-white leading-tight mb-3 line-clamp-2 group-hover:text-primary transition-colors">${item.title}</h3>
+                        
+                        <div class="flex flex-col gap-2 mt-auto">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span class="material-symbols-outlined text-primary text-base">calendar_today</span>
+                                <span class="truncate font-medium">${item.date}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span class="material-symbols-outlined text-primary text-base">location_on</span>
+                                <span class="truncate font-medium">${item.location}</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                            <span class="text-xs font-bold text-primary uppercase tracking-wide group-hover:underline">Lihat Detail</span>
+                            <div class="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:bg-primary group-hover:text-deep-green transition-all">
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                grid.innerHTML += card;
+            });
+        } else {
+            grid.innerHTML = `<div class="col-span-3 text-center py-20 text-gray-400">Tidak ada kegiatan yang cocok.</div>`;
+        }
+        renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+        const container = document.getElementById('pagination-container');
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+        let html = `<button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled class="opacity-50"' : 'class="hover:bg-primary"'} class="flex items-center justify-center size-10 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>`;
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<button onclick="changePage(${i})" class="flex items-center justify-center size-10 rounded-lg ${i === currentPage ? 'bg-primary text-deep-green font-bold shadow-lg' : 'bg-white dark:bg-gray-800 border border-gray-200 hover:bg-primary transition-colors'}">${i}</button>`;
+        }
+        html += `<button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled class="opacity-50"' : 'class="hover:bg-primary"'} class="flex items-center justify-center size-10 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>`;
+        container.innerHTML = html;
+    }
+
+    window.changePage = (page) => { currentPage = page; renderApp(); document.getElementById('eventsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    window.filterEvents = (cat) => {
+        currentFilter = cat; currentPage = 1;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('bg-primary', 'font-bold', 'text-deep-green');
+            btn.classList.add('bg-background-light', 'dark:bg-background-dark', 'font-medium', 'dark:text-white');
+            if(btn.dataset.filter === cat) {
+                btn.classList.add('bg-primary', 'font-bold', 'text-deep-green');
+                btn.classList.remove('bg-background-light', 'dark:bg-background-dark');
+            }
+        });
+        renderApp();
+    };
+    window.globalSearch = (val) => { currentSearch = val; currentPage = 1; renderApp(); };
+</script>
+
+</body>
+</html>

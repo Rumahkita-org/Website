@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>404 - Qadarullah, Halaman Hilang | Rumah Kita</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="logo.png"/>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e66f",
+                        "primary-dark": "#14b859",
+                        "background-light": "#FDFBF7",
+                        "background-dark": "#112118",
+                        "deep-green": "#0e1b13",
+                        "sage": "#4e976d",
+                    },
+                    fontFamily: {
+                        "display": ["Playfair Display", "serif"],
+                        "sans": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .geometric-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(25, 230, 111, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        .dark .geometric-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(25, 230, 111, 0.1) 1px, transparent 0);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-deep-green dark:text-gray-100 antialiased transition-colors duration-300 font-sans">
+    
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden geometric-bg">
+        <div class="layout-container flex h-full grow flex-col">
+            
+            <div class="px-6 md:px-40 flex justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 dark:border-gray-800 px-4 md:px-10 py-3 bg-white/50 dark:bg-background-dark/50 backdrop-blur-md rounded-2xl">
+                        <div class="flex items-center gap-4">
+                            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                                <img src="logo.png" alt="Logo UKMI" class="h-8 w-auto object-contain">
+                                <div class="flex flex-col">
+                                    <h2 class="text-lg font-bold leading-none font-display">Rumah Kita</h2>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                                <span id="theme-icon" class="material-symbols-outlined text-xl">dark_mode</span>
+                            </button>
+                        </div>
+                    </header>
+                </div>
+            </div>
+
+            <main class="flex-1 flex items-center justify-center py-12 px-6">
+                <div class="layout-content-container flex flex-col max-w-[960px] w-full items-center text-center">
+                    
+                    <div class="relative mb-6 animate-[bounce_3s_infinite]">
+                        <h1 class="text-gray-200 dark:text-gray-800 text-[150px] md:text-[220px] font-black leading-none select-none tracking-tighter font-display">404</h1>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-deep-green dark:text-primary text-3xl md:text-5xl font-bold tracking-tight bg-background-light dark:bg-background-dark px-4 py-1 rounded-xl rotate-[-5deg] border border-primary/20 shadow-lg">
+                                Afwan! 🙏
+                            </span>
+                        </div>
+                    </div>
+
+                    <h2 class="text-deep-green dark:text-white text-[24px] md:text-[32px] font-bold leading-tight tracking-tight px-4 pb-4 font-display">
+                        Qadarullah, halaman yang dicari tidak ditemukan.
+                    </h2>
+                    
+                    <p class="text-sage dark:text-gray-400 text-lg font-normal leading-relaxed max-w-xl pb-10 px-4">
+                        Mungkin tautannya sedang <em>uzur</em>, salah ketik, atau sudah hijrah ke alamat baru. 
+                        Tenang, tersesat di website lebih baik daripada tersesat di jalan-Nya.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 px-4 py-3 justify-center w-full sm:w-auto">
+                        <a href="index.html" class="flex min-w-[220px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-8 bg-primary text-deep-green text-base font-bold leading-normal hover:bg-primary-dark hover:-translate-y-1 transition-all shadow-lg shadow-primary/20 gap-2">
+                            <span class="material-symbols-outlined">home</span>
+                            <span class="truncate">Kembali ke Jalan Benar</span>
+                        </a>
+                        <a href="articles.html" class="flex min-w-[220px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-deep-green dark:text-white text-base font-bold leading-normal hover:bg-gray-50 dark:hover:bg-gray-700 transition-all gap-2">
+                            <span class="material-symbols-outlined">menu_book</span>
+                            <span class="truncate">Baca Artikel Saja</span>
+                        </a>
+                    </div>
+
+                    <div class="mt-24 w-full px-4">
+                        <div class="flex items-center gap-4 mb-10">
+                            <div class="h-px grow bg-gray-200 dark:bg-gray-800"></div>
+                            <span class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Jalan Pintas</span>
+                            <div class="h-px grow bg-gray-200 dark:bg-gray-800"></div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            
+                            <a class="group flex flex-col items-center p-8 rounded-2xl bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all" href="activities.html">
+                                <div class="size-14 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+                                    <span class="material-symbols-outlined text-primary group-hover:text-deep-green transition-colors">event_available</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2 text-deep-green dark:text-white">Agenda Kegiatan</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Lihat jadwal kajian dan kegiatan sosial terbaru.</p>
+                            </a>
+
+                            <a class="group flex flex-col items-center p-8 rounded-2xl bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all" href="management.html">
+                                <div class="size-14 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+                                    <span class="material-symbols-outlined text-primary group-hover:text-deep-green transition-colors">diversity_3</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2 text-deep-green dark:text-white">Struktur Pengurus</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Kenali wajah-wajah di balik UKMI Ar-Rahman.</p>
+                            </a>
+
+                            <a class="group flex flex-col items-center p-8 rounded-2xl bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all" href="about.html">
+                                <div class="size-14 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+                                    <span class="material-symbols-outlined text-primary group-hover:text-deep-green transition-colors">mosque</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2 text-deep-green dark:text-white">Tentang Kami</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Pelajari visi, misi, dan sejarah organisasi.</p>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="py-8 px-6 text-center border-t border-gray-100 dark:border-gray-800 mt-10">
+                <p class="text-sm text-gray-400 dark:text-gray-500">
+                    © 2025 UKMI Ar-Rahman UNIMED. All rights reserved.
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Dark Mode Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                icon.innerText = 'dark_mode';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                icon.innerText = 'light_mode';
+            }
+        }
+
+        // Init Theme
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').innerText = 'light_mode';
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.getElementById('theme-icon').innerText = 'dark_mode';
+        }
+    </script>
+
+</body>
+</html>
