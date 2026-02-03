@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Admin Dashboard | Rumah Kita CMS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="logo.png"/>
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#19e66f", "background-light": "#f6f8f7", "background-dark": "#112118" }, fontFamily: { "display": ["Work Sans"] } } } }</script>
+    <style>
+        body { font-family: 'Work Sans', sans-serif; }
+        .hidden-section { display: none; }
+        .drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s ease; }
+        .drop-zone.active { border-color: #19e66f; background-color: rgba(25, 230, 111, 0.1); }
+        /* Transisi Sidebar Mobile */
+        #sidebar { transition: transform 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0e1b13] dark:text-white antialiased min-h-screen flex flex-col md:flex-row">
+
+<div id="login-overlay" class="fixed inset-0 z-[100] bg-background-dark flex items-center justify-center">
+    <div class="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl text-center mx-4">
+        <div class="bg-primary/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-primary text-3xl">lock</span>
+        </div>
+        <h2 class="text-2xl font-bold text-deep-green mb-2">Login Admin</h2>
+        <p class="text-gray-500 text-sm mb-6">Area terbatas khusus pengurus UKMI.</p>
+        <form id="loginForm" class="flex flex-col gap-4 text-left">
+            <input type="email" id="email" placeholder="Email" class="w-full rounded-lg border-gray-300 focus:ring-primary focus:border-primary" required>
+            <input type="password" id="password" placeholder="Password" class="w-full rounded-lg border-gray-300 focus:ring-primary focus:border-primary" required>
+            <p id="login-error" class="text-red-500 text-xs font-bold hidden ml-1">Email atau password salah!</p>
+            <button type="submit" class="bg-primary text-deep-green font-bold py-3 rounded-lg hover:brightness-90 transition-all shadow-lg shadow-primary/30">Masuk Dashboard</button>
+        </form>
+        <div class="mt-4 text-xs text-gray-400">
+            <a href="index.html" class="hover:text-primary transition-colors">← Kembali ke Website Utama</a>
+        </div>
+    </div>
+</div>
+
+<header class="md:hidden bg-white dark:bg-[#15291e] border-b border-gray-200 dark:border-gray-800 p-4 flex justify-between items-center sticky top-0 z-30">
+    <div class="flex items-center gap-2">
+        <img src="logo.png" class="h-8 w-auto object-contain">
+        <span class="font-bold text-sm">Admin Panel</span>
+    </div>
+    <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-deep-green dark:text-white">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+</header>
+
+<div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden glass-panel"></div>
+
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-[#15291e] border-r border-gray-200 dark:border-gray-800 transform -translate-x-full md:translate-x-0 md:static md:flex flex-col justify-between p-4 h-full shadow-2xl md:shadow-none">
+    <div class="flex flex-col gap-6">
+        <div class="flex justify-between items-center md:hidden px-2 mb-2">
+            <span class="font-bold text-gray-500 uppercase text-xs">Menu</span>
+            <button onclick="toggleSidebar()" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="hidden md:flex items-center gap-3 px-2">
+            <img src="logo.png" class="h-8 w-auto object-contain">
+            <div class="flex flex-col"><h1 class="text-base font-bold leading-none">Rumah Kita</h1><p class="text-[#4e976d] text-[11px] font-medium uppercase mt-1">Admin Panel</p></div>
+        </div>
+        
+        <div class="px-2">
+            <label class="text-xs font-bold text-gray-500 uppercase">Periode Data</label>
+            <select id="admin-period-select" onchange="changeAdminPeriod(this.value)" class="w-full mt-1 rounded-lg border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-black/20 text-sm font-bold">
+                <option value="2025" selected>2025 - 2026</option>
+                <option value="2024">2024 - 2025</option>
+            </select>
+        </div>
+
+        <nav class="flex flex-col gap-1 overflow-y-auto max-h-[60vh] md:max-h-full">
+            <button onclick="switchView('dashboard')" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-[#0e1b13] font-semibold transition-all text-left"><span class="material-symbols-outlined">dashboard</span> <span class="text-sm">Ringkasan</span></button>
+            <button onclick="switchView('home')" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all text-left"><span class="material-symbols-outlined">home_app_logo</span> <span class="text-sm">Manajemen Beranda</span></button>
+            <button onclick="switchView('events')" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all text-left"><span class="material-symbols-outlined">event</span> <span class="text-sm">Program Kegiatan</span></button>
+            <button onclick="switchView('articles')" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all text-left"><span class="material-symbols-outlined">article</span> <span class="text-sm">Artikel & Berita</span></button>
+            <button onclick="switchView('history')" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all text-left"><span class="material-symbols-outlined">history_edu</span> <span class="text-sm">Sejarah</span></button>
+            <button onclick="switchView('structure')" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all text-left"><span class="material-symbols-outlined">badge</span> <span class="text-sm">Struktur BPH</span></button>
+            <button onclick="switchView('divisions')" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all text-left"><span class="material-symbols-outlined">diversity_3</span> <span class="text-sm">Divisi & Anggota</span></button>
+        </nav>
+    </div>
+    <button onclick="handleLogout()" class="flex w-full items-center justify-center gap-2 rounded-lg py-3 bg-red-100 text-red-600 text-sm font-bold hover:bg-red-200 transition-all mt-4 md:mt-0"><span class="material-symbols-outlined text-sm">logout</span> <span>Keluar</span></button>
+</aside>
+
+<main class="flex-1 flex flex-col overflow-y-auto h-[calc(100vh-64px)] md:h-screen relative bg-[#f8faf9] dark:bg-background-dark">
+    <div class="p-4 md:p-8 max-w-6xl mx-auto w-full pb-20">
+        
+        <section id="view-dashboard" class="view-section">
+            <h1 class="text-2xl md:text-3xl font-black mb-6">Dashboard Admin</h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl border border-gray-200 shadow-sm"><h3 class="text-gray-500 text-xs font-bold uppercase">Total Kegiatan</h3><p class="text-3xl font-black text-primary mt-2" id="stat-events">0</p></div>
+                <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl border border-gray-200 shadow-sm"><h3 class="text-gray-500 text-xs font-bold uppercase">Total Artikel</h3><p class="text-3xl font-black text-primary mt-2" id="stat-articles">0</p></div>
+                <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl border border-gray-200 shadow-sm"><h3 class="text-gray-500 text-xs font-bold uppercase">Divisi Aktif</h3><p class="text-3xl font-black text-primary mt-2" id="stat-divisions">0</p></div>
+            </div>
+        </section>
+
+        <section id="view-home" class="view-section hidden-section">
+            <div class="mb-6"><h1 class="text-2xl font-bold">Tampilan Beranda</h1><p class="text-sm text-gray-500">Atur foto utama desktop dan mobile.</p></div>
+            <div class="bg-white dark:bg-[#15291e] p-4 md:p-6 rounded-xl border border-gray-200 dark:border-gray-700 max-w-3xl">
+                <div class="flex flex-col gap-6">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Foto Utama (Desktop)</label>
+                        <div class="drop-zone h-32 md:h-48 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800" id="drop-zone-hero">
+                            <span class="material-symbols-outlined text-4xl mb-2 text-primary">computer</span><span class="text-xs md:text-sm font-bold text-center">Upload Landscape</span>
+                            <input type="file" id="file-hero" class="hidden" accept="image/*">
+                        </div>
+                        <div class="mt-4 hidden" id="preview-hero-container"><img id="preview-hero" class="w-full h-32 object-cover rounded-lg border border-gray-200"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Foto Utama (Mobile)</label>
+                        <div class="drop-zone h-32 md:h-48 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800" id="drop-zone-hero-mobile">
+                            <span class="material-symbols-outlined text-4xl mb-2 text-primary">smartphone</span><span class="text-xs md:text-sm font-bold text-center">Upload Portrait</span>
+                            <input type="file" id="file-hero-mobile" class="hidden" accept="image/*">
+                        </div>
+                        <div class="mt-4 hidden w-24 mx-auto" id="preview-hero-mobile-container"><img id="preview-hero-mobile" class="w-full h-32 object-cover rounded-lg border border-gray-200"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="text-xs font-bold text-gray-500">Judul Sapaan</label><input type="text" id="hero-title" class="w-full rounded-lg border-gray-300 mt-1" placeholder="Judul"></div>
+                        <div><label class="text-xs font-bold text-gray-500">Sub-Judul</label><input type="text" id="hero-subtitle" class="w-full rounded-lg border-gray-300 mt-1" placeholder="Sub-judul"></div>
+                    </div>
+                    <button id="btn-save-home" class="bg-primary text-deep-green font-bold py-3 px-8 rounded-lg w-full">Simpan Perubahan</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-events" class="view-section hidden-section">
+            <div class="flex justify-between items-center mb-6"><h1 class="text-xl md:text-2xl font-bold">Program Kegiatan</h1><button onclick="openModal('modal-event')" class="bg-primary px-3 py-2 rounded font-bold text-xs md:text-sm text-deep-green flex gap-2 items-center"><span class="material-symbols-outlined text-sm">add</span> Tambah</button></div>
+            <div class="bg-white dark:bg-[#15291e] rounded-xl border overflow-x-auto"><table class="w-full text-left min-w-[600px]"><tbody id="table-events"></tbody></table></div>
+        </section>
+
+        <section id="view-articles" class="view-section hidden-section">
+            <div class="flex justify-between items-center mb-6"><h1 class="text-xl md:text-2xl font-bold">Artikel</h1><button onclick="openModal('modal-article')" class="bg-primary px-3 py-2 rounded font-bold text-xs md:text-sm text-deep-green flex gap-2 items-center"><span class="material-symbols-outlined text-sm">add</span> Tulis</button></div>
+            <div class="bg-white dark:bg-[#15291e] rounded-xl border overflow-x-auto"><table class="w-full text-left min-w-[600px]"><tbody id="table-articles"></tbody></table></div>
+        </section>
+
+        <section id="view-history" class="view-section hidden-section">
+            <div class="flex justify-between items-center mb-6"><h1 class="text-xl md:text-2xl font-bold">Sejarah</h1><button onclick="openModal('modal-history')" class="bg-primary px-3 py-2 rounded font-bold text-xs md:text-sm text-deep-green flex gap-2 items-center"><span class="material-symbols-outlined text-sm">add</span> Tambah</button></div>
+            <div class="bg-white dark:bg-[#15291e] rounded-xl border overflow-x-auto"><table class="w-full text-left min-w-[600px] text-sm"><tbody id="table-history"></tbody></table></div>
+        </section>
+
+        <section id="view-structure" class="view-section hidden-section">
+            <div class="mb-6"><h1 class="text-xl md:text-2xl font-bold">BPH Periode <span id="bph-year-label">...</span></h1></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl border shadow-sm">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-primary"><span class="material-symbols-outlined">stars</span> Ketua Umum</h3>
+                    <input id="ketum-name" class="w-full mb-3 rounded-lg border-gray-300 text-sm" placeholder="Nama">
+                    <input id="ketum-quote" class="w-full mb-3 rounded-lg border-gray-300 text-sm" placeholder="Quote">
+                    <div id="drop-zone-ketum" class="drop-zone h-24 rounded flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800 text-xs font-bold text-gray-500"><span>Upload Foto</span></div>
+                    <input type="file" id="file-ketum" class="hidden">
+                    <img id="preview-ketum" class="hidden h-24 mt-2 w-full object-cover rounded">
+                </div>
+                <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl border shadow-sm">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-primary"><span class="material-symbols-outlined">edit_note</span> Sekretaris</h3>
+                    <input id="sekum-name" class="w-full mb-3 rounded-lg border-gray-300 text-sm" placeholder="Nama">
+                    <input id="sekum-quote" class="w-full mb-3 rounded-lg border-gray-300 text-sm" placeholder="Quote">
+                    <div id="drop-zone-sekum" class="drop-zone h-24 rounded flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800 text-xs font-bold text-gray-500"><span>Upload Foto</span></div>
+                    <input type="file" id="file-sekum" class="hidden">
+                    <img id="preview-sekum" class="hidden h-24 mt-2 w-full object-cover rounded">
+                </div>
+                <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl border shadow-sm">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-primary"><span class="material-symbols-outlined">account_balance_wallet</span> Bendahara</h3>
+                    <input id="bendum-name" class="w-full mb-3 rounded-lg border-gray-300 text-sm" placeholder="Nama">
+                    <input id="bendum-quote" class="w-full mb-3 rounded-lg border-gray-300 text-sm" placeholder="Quote">
+                    <div id="drop-zone-bendum" class="drop-zone h-24 rounded flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800 text-xs font-bold text-gray-500"><span>Upload Foto</span></div>
+                    <input type="file" id="file-bendum" class="hidden">
+                    <img id="preview-bendum" class="hidden h-24 mt-2 w-full object-cover rounded">
+                </div>
+            </div>
+            <button id="btn-save-bph" class="mt-6 bg-primary text-deep-green font-bold py-3 px-8 rounded-lg w-full shadow-lg">Simpan Struktur BPH</button>
+        </section>
+        
+        <section id="view-divisions" class="view-section hidden-section">
+            <div class="flex justify-between items-center mb-8"><div><h1 class="text-xl md:text-2xl font-bold">Divisi & Anggota</h1></div><button onclick="openModal('modal-add-division')" class="bg-primary text-deep-green px-4 py-2 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2"><span class="material-symbols-outlined text-sm">add_circle</span> Buat Divisi</button></div>
+            <div id="divisions-list-container" class="flex flex-col gap-6 pb-20"></div>
+        </section>
+    </div>
+</main>
+
+<div id="modal-event" class="fixed inset-0 z-[60] hidden bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#15291e] w-full max-w-lg rounded-xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <h2 class="text-xl font-bold mb-4">Tambah Kegiatan</h2>
+        <form id="form-add-event" class="flex flex-col gap-4">
+            <input id="evt-title" class="w-full rounded-lg border-gray-300" placeholder="Nama Kegiatan" required>
+            <div class="grid grid-cols-2 gap-4">
+                <select id="evt-category" class="w-full rounded-lg border-gray-300"><option value="dakwah">Dakwah</option><option value="sosial">Sosial</option><option value="workshop">Workshop</option><option value="phbi">PHBI</option></select>
+                <input id="evt-date" type="date" class="w-full rounded-lg border-gray-300" required>
+            </div>
+            <input id="evt-location" class="w-full rounded-lg border-gray-300" placeholder="Lokasi" required>
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase mb-2 block">Dokumentasi</label>
+                <div class="drop-zone h-32 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800" id="drop-zone-evt">
+                    <span class="material-symbols-outlined text-3xl">add_photo_alternate</span>
+                    <input type="file" id="file-evt" class="hidden" accept="image/*" multiple>
+                </div>
+                <div id="evt-preview-container" class="grid grid-cols-4 gap-2 mt-4"></div>
+            </div>
+            <div class="flex gap-3 justify-end mt-4">
+                <button type="button" onclick="closeModal('modal-event')" class="px-4 py-2 border rounded-lg">Batal</button>
+                <button type="submit" class="bg-primary font-bold px-4 py-2 rounded-lg text-deep-green">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-article" class="fixed inset-0 z-[60] hidden bg-black/50 flex justify-center items-center p-4">
+    <div class="bg-white dark:bg-[#15291e] p-6 rounded-xl w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+        <h2 class="font-bold mb-4 text-xl">Tambah Artikel</h2>
+        <form id="form-add-article">
+            <input id="art-title" class="w-full mb-3 rounded-lg border-gray-300" placeholder="Judul Artikel" required>
+            <input id="art-author" class="w-full mb-3 rounded-lg border-gray-300" placeholder="Nama Pena" required>
+            <input id="art-category" class="w-full mb-3 rounded-lg border-gray-300" placeholder="Kategori">
+            <textarea id="art-content" class="w-full mb-3 rounded-lg border-gray-300 h-48 p-3" placeholder="Isi artikel..." required></textarea>
+            <div id="drop-zone-art" class="drop-zone h-24 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-50 dark:bg-gray-800 mb-4"><span class="text-xs">Upload Cover</span></div>
+            <input type="file" id="file-art" class="hidden">
+            <div id="preview-art-container" class="hidden mb-4 h-32 w-full rounded overflow-hidden relative"><img id="preview-art" class="w-full h-full object-cover"></div>
+            <div class="flex gap-3 justify-end pt-4"><button type="button" onclick="closeModal('modal-article')" class="px-4 py-2 border rounded-lg">Batal</button><button type="submit" class="bg-primary px-4 py-2 rounded-lg font-bold text-deep-green">Terbitkan</button></div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-history" class="fixed inset-0 z-[60] hidden bg-black/50 flex items-center justify-center p-4"><div class="bg-white dark:bg-[#15291e] w-full max-w-lg rounded-xl p-6"><h2 class="font-bold mb-4">Tambah Sejarah</h2><form id="form-add-history" class="flex flex-col gap-4"><input id="hist-year" type="number" class="w-full rounded-lg" placeholder="Tahun" required><input id="hist-title" class="w-full rounded-lg" placeholder="Judul" required><div id="drop-zone-hist" class="border dashed h-20 flex items-center justify-center cursor-pointer">Foto Sejarah</div><input type="file" id="file-hist" class="hidden"><textarea id="hist-desc" class="w-full rounded-lg" placeholder="Deskripsi"></textarea><button type="submit" id="btn-submit-history" class="bg-primary w-full py-2 rounded font-bold">Simpan</button><button type="button" onclick="closeModal('modal-history')" class="mt-2 text-sm w-full">Batal</button></form></div></div>
+
+<div id="modal-add-division" class="fixed inset-0 z-[60] hidden bg-black/50 flex justify-center items-center p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm"><h2 class="font-bold mb-4">Buat Divisi</h2><form id="form-division"><input id="div-name" class="w-full mb-2 border rounded" placeholder="Nama" required><textarea id="div-desc" class="w-full border rounded" placeholder="Deskripsi"></textarea><button type="submit" class="bg-primary w-full mt-4 py-2 rounded font-bold">Simpan</button><button type="button" onclick="closeModal('modal-add-division')" class="mt-2 text-sm w-full">Batal</button></form></div></div>
+<div id="modal-add-member" class="fixed inset-0 z-[60] hidden bg-black/50 flex justify-center items-center p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm"><h2 class="font-bold mb-4">Tambah Anggota</h2><form id="form-member"><input type="hidden" id="target-div-id"><input id="mem-name" class="w-full mb-2 border rounded" placeholder="Nama" required><input id="mem-role" class="w-full mb-2 border rounded" placeholder="Jabatan"><div id="drop-zone-mem" class="border dashed h-20 mb-2 flex items-center justify-center cursor-pointer">Foto</div><input type="file" id="file-mem" class="hidden"><button type="submit" class="bg-primary w-full mt-4 py-2 rounded font-bold">Simpan</button><button type="button" onclick="closeModal('modal-add-member')" class="mt-2 text-sm w-full">Batal</button></form></div></div>
+
+<script>
+    const CLOUD_NAME = "dwb3qlckm"; const UPLOAD_PRESET = "web_ukmi";
+    const ADMIN_EMAIL = "lenteramediart@gmail.com";
+    const ADMIN_PASS = "Rumahkita";
+
+    // Toggle Sidebar Mobile
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        
+        // Toggle Translate Class
+        if (sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.remove('-translate-x-full'); // Show
+            backdrop.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full'); // Hide
+            backdrop.classList.add('hidden');
+        }
+    }
+
+    // Auto-Close Sidebar on Item Click (Mobile UX)
+    function switchView(id) { 
+        document.querySelectorAll('.view-section').forEach(e=>e.classList.add('hidden-section')); 
+        document.getElementById('view-'+id).classList.remove('hidden-section');
+        
+        // Update Active State
+        document.querySelectorAll('.nav-item').forEach(b => {
+            b.classList.remove('bg-primary', 'text-[#0e1b13]');
+            b.classList.add('text-gray-600', 'dark:text-gray-300');
+        });
+        const activeBtn = document.querySelector(`button[onclick="switchView('${id}')"]`);
+        if(activeBtn) {
+            activeBtn.classList.remove('text-gray-600', 'dark:text-gray-300');
+            activeBtn.classList.add('bg-primary', 'text-[#0e1b13]');
+        }
+
+        // Close sidebar if on mobile
+        if (window.innerWidth < 768) {
+            toggleSidebar();
+        }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // Cloudinary & Preview Logic
+    async function uploadToCloudinary(file) {
+        if (!file) return null;
+        const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
+        try { const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData }); const data = await res.json(); return data.secure_url ? data.secure_url.replace('/upload/', '/upload/q_auto,f_auto/') : null; } catch (e) { return null; }
+    }
+
+    function setupSingleUpload(dropId, fileId, previewId, hiddenId) {
+        const zone = document.getElementById(dropId); const input = document.getElementById(fileId);
+        if(!zone) return;
+        zone.addEventListener('click', () => input.click());
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file) { const r = new FileReader(); r.readAsDataURL(file); r.onload = () => { 
+                const img = document.getElementById(previewId); 
+                img.src = r.result; img.parentElement.classList.remove('hidden'); img.classList.remove('hidden'); 
+            }; }
+        });
+    }
+
+    // Auth Handling
+    document.addEventListener("DOMContentLoaded", () => {
+        const isLogged = sessionStorage.getItem("ukmi_admin_logged");
+        if(isLogged === "true") { document.getElementById('login-overlay').style.display = 'none'; }
+        
+        // Setup Uploads
+        setupSingleUpload('drop-zone-hero', 'file-hero', 'preview-hero', 'hero-img-data');
+        setupSingleUpload('drop-zone-hero-mobile', 'file-hero-mobile', 'preview-hero-mobile', 'hero-mobile-img-data');
+        setupSingleUpload('drop-zone-art', 'file-art', 'preview-art', 'art-image');
+        setupSingleUpload('drop-zone-hist', 'file-hist', 'preview-hist', 'hist-image');
+        setupSingleUpload('drop-zone-ketum', 'file-ketum', 'preview-ketum', 'ketum-img-data');
+        setupSingleUpload('drop-zone-sekum', 'file-sekum', 'preview-sekum', 'sekum-img-data');
+        setupSingleUpload('drop-zone-bendum', 'file-bendum', 'preview-bendum', 'bendum-img-data'); 
+        setupSingleUpload('drop-zone-mem', 'file-mem', 'preview-mem', 'mem-image');
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const eVal = document.getElementById('email').value;
+        const pVal = document.getElementById('password').value;
+        if(eVal === ADMIN_EMAIL && pVal === ADMIN_PASS) {
+            sessionStorage.setItem("ukmi_admin_logged", "true");
+            document.getElementById('login-overlay').style.display = 'none';
+        } else {
+            document.getElementById('login-error').classList.remove('hidden');
+        }
+    });
+
+    function handleLogout() {
+        sessionStorage.removeItem("ukmi_admin_logged");
+        location.reload();
+    }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyD99enNG4t0Ttq8OxXLYyy6kqwg3shCqM4", authDomain: "rumah-kita-31dc0.firebaseapp.com", databaseURL: "https://rumah-kita-31dc0-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "rumah-kita-31dc0", storageBucket: "rumah-kita-31dc0.firebasestorage.app", messagingSenderId: "210169122541", appId: "1:210169122541:web:626ec3d023519ac1ce46e4", measurementId: "G-YV2DVYHL9Z" };
+    const app = initializeApp(firebaseConfig); const db = getDatabase(app);
+    let currentAdminYear = "2025"; 
+
+    window.changeAdminPeriod = (y) => { currentAdminYear = y; loadBPH(); loadDivisions(); loadHome(); };
+
+    // SAVE HOME
+    document.getElementById('btn-save-home').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-save-home'); btn.innerText = "Menyimpan...";
+        let deskImg = document.getElementById('preview-hero').src;
+        let mobImg = document.getElementById('preview-hero-mobile').src;
+        const fDesk = document.getElementById('file-hero').files[0];
+        const fMob = document.getElementById('file-hero-mobile').files[0];
+        if(fDesk) deskImg = await uploadToCloudinary(fDesk);
+        if(fMob) mobImg = await uploadToCloudinary(fMob);
+        set(ref(db, `periods/${currentAdminYear}/home`), { heroImage: deskImg, heroImageMobile: mobImg, heroTitle: document.getElementById('hero-title').value, heroSubtitle: document.getElementById('hero-subtitle').value }).then(() => { alert("Beranda Diperbarui!"); btn.innerText = "Simpan Perubahan"; });
+    });
+
+    function loadHome() {
+        onValue(ref(db, `periods/${currentAdminYear}/home`), (s) => {
+            const d = s.val() || {};
+            document.getElementById('hero-title').value = d.heroTitle || "";
+            document.getElementById('hero-subtitle').value = d.heroSubtitle || "";
+            if(d.heroImage) { document.getElementById('preview-hero').src = d.heroImage; document.getElementById('preview-hero-container').classList.remove('hidden'); }
+            if(d.heroImageMobile) { document.getElementById('preview-hero-mobile').src = d.heroImageMobile; document.getElementById('preview-hero-mobile-container').classList.remove('hidden'); }
+        });
+    }
+
+    // ADD EVENT & IMAGE PREVIEWS
+    let tempEventFiles = [];
+    document.getElementById('drop-zone-evt').addEventListener('click', () => document.getElementById('file-evt').click());
+    document.getElementById('file-evt').addEventListener('change', (e) => { tempEventFiles = [...tempEventFiles, ...Array.from(e.target.files)]; renderEventPreviews(); });
+    function renderEventPreviews() { const c = document.getElementById('evt-preview-container'); c.innerHTML = ""; tempEventFiles.forEach((f, i) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => c.innerHTML += `<div class="relative h-20 rounded border overflow-hidden"><img src="${r.result}" class="w-full h-full object-cover"><button onclick="tempEventFiles.splice(${i},1);renderEventPreviews()" class="absolute top-0 right-0 bg-red-500 text-white px-1">X</button></div>`; }); }
+
+    document.getElementById('form-add-event').addEventListener('submit', async (e) => { e.preventDefault(); const urls=[]; for(let f of tempEventFiles){const u=await uploadToCloudinary(f);if(u)urls.push(u)} if(urls.length>0 || tempEventFiles.length === 0) push(ref(db,'events'),{title:document.getElementById('evt-title').value, category:document.getElementById('evt-category').value, date:document.getElementById('evt-date').value, location:document.getElementById('evt-location').value, image:urls[0] || '', gallery:urls}).then(()=>{ closeModal('modal-event'); tempEventFiles=[]; renderEventPreviews(); e.target.reset(); }); });
+
+    // ADD ARTICLE
+    document.getElementById('form-add-article').addEventListener('submit', async (e) => { 
+        e.preventDefault(); const btn = e.target.querySelector('button[type="submit"]'); btn.innerText = "Mengupload...";
+        const f = document.getElementById('file-art').files[0]; let u = ""; if(f) u = await uploadToCloudinary(f); 
+        push(ref(db,'articles'), { title: document.getElementById('art-title').value, author: document.getElementById('art-author').value, category: document.getElementById('art-category').value, image: u, content: document.getElementById('art-content').value, date: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }).then(() => { closeModal('modal-article'); btn.innerText = "Terbitkan"; alert("Artikel Berhasil!"); e.target.reset(); document.getElementById('preview-art-container').classList.add('hidden'); }); 
+    });
+
+    // HISTORY
+    document.getElementById('form-add-history').addEventListener('submit', async (e) => { e.preventDefault(); const f=document.getElementById('file-hist').files[0]; let u=""; if(f)u=await uploadToCloudinary(f); push(ref(db,'history'),{year:document.getElementById('hist-year').value, title:document.getElementById('hist-title').value, desc:document.getElementById('hist-desc').value, image:u}).then(()=>{closeModal('modal-history');}); });
+
+    // SAVE BPH
+    document.getElementById('btn-save-bph').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-save-bph'); btn.innerText = "Menyimpan...";
+        let kImg = document.getElementById('preview-ketum').src; let sImg = document.getElementById('preview-sekum').src; let bImg = document.getElementById('preview-bendum').src; 
+        const fK = document.getElementById('file-ketum').files[0]; const fS = document.getElementById('file-sekum').files[0]; const fB = document.getElementById('file-bendum').files[0]; 
+        if(fK) kImg = await uploadToCloudinary(fK); if(fS) sImg = await uploadToCloudinary(fS); if(fB) bImg = await uploadToCloudinary(fB);
+        set(ref(db, `periods/${currentAdminYear}/structure/bph`), { ketumName: document.getElementById('ketum-name').value, ketumQuote: document.getElementById('ketum-quote').value, ketumImg: kImg, sekumName: document.getElementById('sekum-name').value, sekumQuote: document.getElementById('sekum-quote').value, sekumImg: sImg, bendumName: document.getElementById('bendum-name').value, bendumQuote: document.getElementById('bendum-quote').value, bendumImg: bImg }).then(() => { alert("BPH Tersimpan!"); btn.innerText = "Simpan Struktur BPH"; });
+    });
+    
+    function loadBPH(){ onValue(ref(db,`periods/${currentAdminYear}/structure/bph`),(s)=>{ const d=s.val()||{}; document.getElementById('ketum-name').value=d.ketumName||""; document.getElementById('ketum-quote').value=d.ketumQuote||""; if(d.ketumImg)document.getElementById('preview-ketum').src=d.ketumImg; document.getElementById('sekum-name').value=d.sekumName||""; document.getElementById('sekum-quote').value=d.sekumQuote||""; if(d.sekumImg)document.getElementById('preview-sekum').src=d.sekumImg; document.getElementById('bendum-name').value=d.bendumName||""; document.getElementById('bendum-quote').value=d.bendumQuote||""; if(d.bendumImg)document.getElementById('preview-bendum').src=d.bendumImg; }); }
+    
+    // TABLES RENDER
+    function renderTable(id, d, k) { const t=document.getElementById(id); t.innerHTML=""; if(d) Object.keys(d).forEach(x=>t.innerHTML+=`<tr class="border-b"><td class="p-3 truncate max-w-[200px]">${d[x][k]}</td><td class="text-right"><button onclick="del('${id.replace('table-','')}/${x}')" class="text-red-500 font-bold p-2">X</button></td></tr>`); }
+    onValue(ref(db,'events'),(s)=>{renderTable('table-events',s.val(),'title');document.getElementById('stat-events').innerText=s.val()?Object.keys(s.val()).length:0;});
+    onValue(ref(db,'articles'),(s)=>{renderTable('table-articles',s.val(),'title');document.getElementById('stat-articles').innerText=s.val()?Object.keys(s.val()).length:0;});
+    onValue(ref(db,'history'),(s)=>renderTable('table-history',s.val(),'year'));
+
+    // DIVISIONS & MEMBERS
+    document.getElementById('form-division').addEventListener('submit', (e)=>{e.preventDefault(); push(ref(db,`periods/${currentAdminYear}/divisions`),{name:document.getElementById('div-name').value, desc:document.getElementById('div-desc').value}).then(()=>closeModal('modal-add-division'));});
+    document.getElementById('form-member').addEventListener('submit', async(e)=>{e.preventDefault(); const f=document.getElementById('file-mem').files[0]; let u=""; if(f)u=await uploadToCloudinary(f); push(ref(db,`periods/${currentAdminYear}/divisions/${document.getElementById('target-div-id').value}/members`),{name:document.getElementById('mem-name').value, role:document.getElementById('mem-role').value, image:u}).then(()=>closeModal('modal-add-member'));});
+    window.openAddMemberModal=(id)=>{document.getElementById('target-div-id').value=id; openModal('modal-add-member');};
+    function loadDivisions(){ onValue(ref(db,`periods/${currentAdminYear}/divisions`),(s)=>{const d=s.val(); const c=document.getElementById('divisions-list-container'); c.innerHTML=""; document.getElementById('stat-divisions').innerText=d?Object.keys(d).length:0; if(d)Object.keys(d).forEach(k=>{let mh='<div class="flex gap-2 mt-2 flex-wrap">'; if(d[k].members)Object.values(d[k].members).forEach(m=>mh+=`<img src="${m.image}" class="w-8 h-8 rounded-full border">`); mh+='</div>'; c.innerHTML+=`<div class="p-4 bg-white dark:bg-[#15291e] border rounded-xl"><div class="flex justify-between"><h3>${d[k].name}</h3><button onclick="del('periods/${currentAdminYear}/divisions/${k}')" class="text-red-500 font-bold text-xs bg-red-50 p-2 rounded">Hapus Divisi</button></div><button onclick="openAddMemberModal('${k}')" class="text-xs bg-primary/20 px-3 py-1 rounded-full mt-2 font-bold text-primary">+ Anggota</button>${mh}</div>`;});}); }
+
+    window.del=(p)=>{if(confirm("Hapus data ini?"))remove(ref(db,p));};
+    changeAdminPeriod("2025");
+</script>
+</body>
+</html>
