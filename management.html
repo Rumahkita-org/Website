@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Struktur Kepengurusan | Rumah Kita - UKMI Ar-Rahman</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="logo.png"/>
+
+    <script>
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#19e66f", "background-light": "#f6f8f7", "background-dark": "#112118", "deep-green": "#0e1b13", "sage": "#4e976d" }, fontFamily: { "display": ["Work Sans", "sans-serif"] } } } }
+    </script>
+    <style>
+        .geometric-pattern { background-image: radial-gradient(#19e66f22 1px, transparent 1px); background-size: 40px 40px; }
+        .dark .geometric-pattern { background-image: radial-gradient(#19e66f11 1px, transparent 1px); }
+        #mobile-menu { transition: max-height 0.3s ease-in-out; }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-deep-green dark:text-gray-100 antialiased transition-colors duration-300">
+
+<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 h-20 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="logo.png" alt="Logo UKMI" class="h-10 w-auto object-contain">
+            <div class="flex flex-col"><h2 class="text-xl font-bold tracking-tight leading-none">Rumah Kita</h2><span class="text-[10px] font-semibold tracking-wider text-gray-500 uppercase">UKMI Ar-Rahman</span></div>
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="index.html">Beranda</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="about.html">Tentang</a>
+            <a class="text-sm font-bold text-primary transition-colors" href="management.html">Struktur</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="activities.html">Program</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="articles.html">Artikel</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"><span id="theme-icon" class="material-symbols-outlined text-xl">dark_mode</span></button>
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-deep-green dark:text-white"><span class="material-symbols-outlined text-2xl">menu</span></button>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+        <nav class="flex flex-col p-6 gap-4 text-center">
+            <a class="text-lg font-medium hover:text-primary" href="index.html">Beranda</a>
+            <a class="text-lg font-medium hover:text-primary" href="about.html">Tentang</a>
+            <a class="text-lg font-medium hover:text-primary" href="management.html">Struktur</a>
+            <a class="text-lg font-medium hover:text-primary" href="activities.html">Program</a>
+            <a class="text-lg font-medium hover:text-primary" href="articles.html">Artikel</a>
+        </nav>
+    </div>
+</header>
+
+<main class="min-h-screen pb-20">
+    <div class="max-w-[1200px] mx-auto px-6 lg:px-20 py-12">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-gray-200 dark:border-gray-800 pb-8 mb-12">
+            <div class="max-w-2xl animate-fade-in-up">
+                <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight text-deep-green dark:text-white mb-4">Struktur Kepengurusan</h1>
+                <p class="text-lg text-sage dark:text-gray-400">Amanah dan dedikasi dalam berkhidmat untuk umat. Bersinergi mewujudkan kampus yang islami dan progresif.</p>
+            </div>
+            <div class="w-full md:w-auto min-w-[250px]">
+                <label class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 block">Pilih Periode</label>
+                <div class="relative">
+                    <select id="periodSelector" onchange="changePeriod(this.value)" class="w-full appearance-none rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-background-dark px-5 py-3 pr-10 text-deep-green dark:text-white font-bold focus:border-primary focus:ring-primary transition-all cursor-pointer shadow-sm">
+                        <option value="2025" selected>2025 - 2026 (Aktif)</option>
+                        <option value="2024">2024 - 2025</option>
+                        <option value="2023">2023 - 2024</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500"><span class="material-symbols-outlined">expand_more</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="managementContent" class="opacity-100 transition-opacity duration-500">
+            <div class="mb-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="bg-primary/10 p-2 rounded-lg text-primary"><span class="material-symbols-outlined text-2xl">stars</span></div>
+                    <h2 class="text-2xl font-bold text-deep-green dark:text-white">BPH</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                    
+                    <div class="md:order-2 group bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg hover:border-primary/50 transition-all flex flex-col items-center text-center transform md:-translate-y-4 z-10 relative">
+                        <div class="size-56 shrink-0 rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-700 relative mb-6 border-4 border-primary/20">
+                            <img id="ketum-img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://via.placeholder.com/400" alt="Ketua Umum">
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <h3 id="ketum-name" class="text-2xl font-bold text-deep-green dark:text-white mb-1">Memuat Data...</h3>
+                            <span class="text-primary font-bold text-sm mb-3">Ketua Umum</span>
+                            <p id="ketum-quote" class="text-sage dark:text-gray-400 font-medium italic text-sm">"..."</p>
+                        </div>
+                    </div>
+
+                    <div class="md:order-1 group bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg hover:border-primary/50 transition-all flex flex-col items-center text-center">
+                        <div class="size-40 shrink-0 rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-700 relative mb-6">
+                            <img id="sekum-img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://via.placeholder.com/400" alt="Sekretaris Umum">
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <h3 id="sekum-name" class="text-xl font-bold text-deep-green dark:text-white mb-1">Memuat Data...</h3>
+                            <span class="text-primary/80 font-bold text-xs uppercase tracking-wide mb-3">Sekretaris Umum</span>
+                            <p id="sekum-quote" class="text-sage dark:text-gray-400 font-medium italic text-xs">"..."</p>
+                        </div>
+                    </div>
+
+                    <div class="md:order-3 group bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg hover:border-primary/50 transition-all flex flex-col items-center text-center">
+                        <div class="size-40 shrink-0 rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-700 relative mb-6">
+                            <img id="bendum-img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://via.placeholder.com/400" alt="Bendahara Umum">
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <h3 id="bendum-name" class="text-xl font-bold text-deep-green dark:text-white mb-1">Memuat Data...</h3>
+                            <span class="text-primary/80 font-bold text-xs uppercase tracking-wide mb-3">Bendahara Umum</span>
+                            <p id="bendum-quote" class="text-sage dark:text-gray-400 font-medium italic text-xs">"..."</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="divisions-container">
+                <div class="text-center py-20 text-gray-400">Memuat struktur...</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement; const icon = document.getElementById('theme-icon');
+        if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.setItem('theme', 'light'); icon.innerText = 'dark_mode'; } 
+        else { html.classList.add('dark'); localStorage.setItem('theme', 'dark'); icon.innerText = 'light_mode'; }
+    }
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('theme-icon').innerText = 'light_mode'; } 
+    else { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').innerText = 'dark_mode'; }
+    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD99enNG4t0Ttq8OxXLYyy6kqwg3shCqM4",
+        authDomain: "rumah-kita-31dc0.firebaseapp.com",
+        databaseURL: "https://rumah-kita-31dc0-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "rumah-kita-31dc0",
+        storageBucket: "rumah-kita-31dc0.firebasestorage.app",
+        messagingSenderId: "210169122541",
+        appId: "1:210169122541:web:626ec3d023519ac1ce46e4",
+        measurementId: "G-YV2DVYHL9Z"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // VARIABEL GLOBAL
+    let activeRefBPH = null;
+    let activeRefDiv = null;
+
+    // FUNGSI LOAD DATA PERIODE
+    window.changePeriod = function(year) {
+        document.getElementById('managementContent').style.opacity = '0.5';
+        
+        // 1. Matikan listener lama
+        if(activeRefBPH) off(activeRefBPH);
+        if(activeRefDiv) off(activeRefDiv);
+
+        // 2. LOAD BPH (KETUM, SEKUM, BENDUM)
+        activeRefBPH = ref(db, `periods/${year}/structure/bph`);
+        onValue(activeRefBPH, (snapshot) => {
+            const data = snapshot.val() || {};
+            
+            // Ketua Umum
+            document.getElementById('ketum-name').innerText = data.ketumName || "Belum diisi";
+            document.getElementById('ketum-quote').innerText = `"${data.ketumQuote || '-'}"`;
+            document.getElementById('ketum-img').src = data.ketumImg || "https://via.placeholder.com/400";
+            
+            // Sekretaris Umum
+            document.getElementById('sekum-name').innerText = data.sekumName || "Belum diisi";
+            document.getElementById('sekum-quote').innerText = `"${data.sekumQuote || '-'}"`;
+            document.getElementById('sekum-img').src = data.sekumImg || "https://via.placeholder.com/400";
+
+            // Bendahara Umum
+            document.getElementById('bendum-name').innerText = data.bendumName || "Belum diisi";
+            document.getElementById('bendum-quote').innerText = `"${data.bendumQuote || '-'}"`;
+            document.getElementById('bendum-img').src = data.bendumImg || "https://via.placeholder.com/400";
+        });
+
+        // 3. LOAD DIVISIONS
+        activeRefDiv = ref(db, `periods/${year}/divisions`);
+        onValue(activeRefDiv, (snapshot) => {
+            const data = snapshot.val();
+            const container = document.getElementById('divisions-container');
+            container.innerHTML = "";
+
+            if (data) {
+                Object.keys(data).forEach(divKey => {
+                    const div = data[divKey];
+                    let membersHTML = '';
+                    if (div.members) {
+                        Object.keys(div.members).forEach(memKey => {
+                            const mem = div.members[memKey];
+                            membersHTML += `
+                                <div class="flex flex-col items-center text-center group animate-fade-in-up">
+                                    <div class="size-24 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 mb-3 border-2 border-transparent group-hover:border-primary transition-all">
+                                        <img class="w-full h-full object-cover" src="${mem.image || 'https://via.placeholder.com/150'}" alt="${mem.name}">
+                                    </div>
+                                    <h4 class="font-bold text-deep-green dark:text-white text-sm">${mem.name}</h4>
+                                    <p class="text-xs text-primary font-medium uppercase tracking-wide">${mem.role}</p>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        membersHTML = `<p class="col-span-full text-center text-gray-400 text-sm italic">Belum ada anggota.</p>`;
+                    }
+
+                    const sectionHTML = `
+                        <div class="mb-12 pt-8 border-t border-gray-100 dark:border-gray-800">
+                            <div class="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-2">
+                                <div>
+                                    <h3 class="text-xl font-bold text-deep-green dark:text-white">${div.name}</h3>
+                                    <p class="text-sm text-gray-500">${div.desc || ''}</p>
+                                </div>
+                                <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded w-fit">
+                                    ${div.members ? Object.keys(div.members).length : 0} Anggota
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
+                                ${membersHTML}
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', sectionHTML);
+                });
+            } else {
+                container.innerHTML = `<div class="text-center py-20 text-gray-400">Belum ada data kepengurusan untuk tahun ${year}.</div>`;
+            }
+            document.getElementById('managementContent').style.opacity = '1';
+        });
+    };
+
+    // Load Default Year
+    changePeriod("2025");
+</script>
+
+</body>
+</html>
